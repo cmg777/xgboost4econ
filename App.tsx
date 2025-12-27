@@ -4,7 +4,7 @@ import { AITutor } from './components/AITutor';
 import { GlossaryTerm } from './components/GlossaryTerm';
 import { Quiz } from './components/Quiz';
 import * as Icons from './components/icons';
-import { algorithmSteps, codeExamples, coreConceptsQuiz, algorithmQuiz } from './constants';
+import { algorithmSteps, codeExamples, coreConceptsQuiz, algorithmQuiz, shapCodeWalkthrough } from './constants';
 import { explainCode, generateUseCases, generateCaseStudyCode } from './services/geminiService';
 
 const App: React.FC = () => {
@@ -14,7 +14,9 @@ const App: React.FC = () => {
     const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
     const [isDarkMode, setIsDarkMode] = useState(() => {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('theme') === 'dark';
+            const theme = localStorage.getItem('theme');
+            if (theme) return theme === 'dark';
+            return window.matchMedia('(prefers-color-scheme: dark)').matches;
         }
         return false;
     });
@@ -106,8 +108,35 @@ const App: React.FC = () => {
         )},
         { id: 2, title: "Algorithm Walkthrough", icon: <Icons.Play className="w-5 h-5" />, content: (
             <div className="space-y-4">
-                {algorithmSteps.map((step) => (<div key={step.id} className="border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 overflow-hidden"><button onClick={() => toggleStep(step.id)} className="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"><span className="font-semibold text-slate-800 dark:text-slate-200">{step.title}</span>{expandedSteps[step.id] ? <Icons.ChevronDown className="text-sky-600" /> : <Icons.ChevronRight className="text-slate-500" />}</button>{expandedSteps[step.id] && (<div className="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4 bg-white dark:bg-slate-800"><p className="text-slate-700 dark:text-slate-300">{step.detail}</p><div className="bg-slate-100 dark:bg-slate-700 p-4 rounded-lg"><div className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">FORMULA</div><div className="font-mono text-sm text-slate-800 dark:text-slate-200">{step.formula}</div></div></div>)}</div>))}
-                <div className="mt-8 bg-amber-50 dark:bg-amber-900/20 p-5 rounded-lg border-l-4 border-amber-400"><h4 className="font-bold text-amber-900 dark:text-amber-200 mb-2">🔑 Key Insight</h4><p className="text-slate-700 dark:text-slate-300">Each tree in XGBoost doesn't predict the target directly - it predicts the <GlossaryTerm term="residuals" definition="The error of the current model's prediction for each data point (Actual Value - Predicted Value). The next tree learns to predict these errors." /> (errors) from the previous stage. This sequential error correction is what makes boosting so powerful!</p></div>
+                {algorithmSteps.map((step) => (
+                    <div key={step.id} className="border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 overflow-hidden">
+                        <button onClick={() => toggleStep(step.id)} className="w-full p-4 text-left flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                            <span className="font-semibold text-slate-800 dark:text-slate-200">{step.title}</span>
+                            {expandedSteps[step.id] ? <Icons.ChevronDown className="text-sky-600" /> : <Icons.ChevronRight className="text-slate-500" />}
+                        </button>
+                        {expandedSteps[step.id] && (
+                            <div className="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4 bg-white dark:bg-slate-800">
+                                <p className="text-slate-700 dark:text-slate-300">{step.detail}</p>
+                                <div className="bg-slate-100 dark:bg-slate-700 p-4 rounded-lg">
+                                    <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">FORMULA</div>
+                                    <div className="font-mono text-sm text-slate-800 dark:text-slate-200">{step.formula}</div>
+                                </div>
+                                {step.code && (
+                                    <div className="bg-slate-100 dark:bg-slate-700 p-4 rounded-lg">
+                                        <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-2">CODE SNIPPET</div>
+                                        <pre className="bg-slate-900 text-sky-300 p-3 rounded-md text-sm overflow-x-auto">
+                                            <code>{step.code}</code>
+                                        </pre>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                ))}
+                <div className="mt-8 bg-amber-50 dark:bg-amber-900/20 p-5 rounded-lg border-l-4 border-amber-400">
+                    <h4 className="font-bold text-amber-900 dark:text-amber-200 mb-2">🔑 Key Insight</h4>
+                    <p className="text-slate-700 dark:text-slate-300">Each tree in XGBoost doesn't predict the target directly - it predicts the <GlossaryTerm term="residuals" definition="The error of the current model's prediction for each data point (Actual Value - Predicted Value). The next tree learns to predict these errors." /> (errors) from the previous stage. This sequential error correction is what makes boosting so powerful!</p>
+                </div>
                 <Quiz questions={algorithmQuiz} />
             </div>
         )},
@@ -117,7 +146,8 @@ const App: React.FC = () => {
                     const resultId = `explain_${example.title.replace(/\s+/g, '_')}`;
                     return (
                         <div key={example.id} className="border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 overflow-hidden">
-                            <div className="bg-slate-50 dark:bg-slate-800/50 p-4"><h4 className="font-bold text-slate-800 dark:text-slate-200 mb-2">{example.title}</h4><p className="text-sm text-slate-600 dark:text-slate-400 mb-3">{example.description}</p>
+                            <div className="bg-slate-50 dark:bg-slate-800/50 p-4"><h4 className="font-bold text-slate-800 dark:text-slate-200 mb-2">{example.title}</h4>
+                                <div className="text-sm text-slate-600 dark:text-slate-400 mb-3 space-y-2" dangerouslySetInnerHTML={{ __html: example.description }}></div>
                                 <div className="flex gap-2 flex-wrap">
                                     <button onClick={() => toggleCode(example.id)} className="flex items-center gap-2 px-3 py-1 bg-sky-600 text-white rounded-md text-sm hover:bg-sky-700"><Icons.Code className="w-4 h-4" />{showCode[example.id] ? 'Hide Code' : 'Show Code'}</button>
                                     <button onClick={() => handleExplainCode(example.code, example.title)} disabled={geminiIsLoading[resultId]} className="flex items-center justify-center gap-2 px-3 py-1 bg-violet-600 text-white rounded-md text-sm hover:bg-violet-700 disabled:bg-slate-400">
@@ -166,10 +196,37 @@ const App: React.FC = () => {
                 </div>
             </div>
         )},
-        { id: 4, title: "Model Comparison", icon: <Icons.Scale className="w-5 h-5" />, content: (
+        { id: 4, title: "SHAP Code Analysis", icon: <Icons.FileCode className="w-5 h-5" />, content: (
+            <div className="space-y-6">
+                <div className="bg-sky-50 dark:bg-sky-900/20 p-5 rounded-lg border-l-4 border-sky-400">
+                    <h3 className="text-xl font-bold text-sky-900 dark:text-sky-200 mb-2">Unveiling the "Why": Interpreting XGBoost with SHAP</h3>
+                    <p className="text-slate-700 dark:text-slate-300">While XGBoost is incredibly powerful, it's often seen as a "black box." <GlossaryTerm term="SHAP" definition="SHapley Additive exPlanations is a game theoretic approach to explain the output of any machine learning model." /> helps us understand the *why* behind its predictions. This section breaks down a full Python script for SHAP analysis, from setup to advanced plotting.</p>
+                </div>
+                {shapCodeWalkthrough.map((example) => {
+                    const resultId = `explain_${example.title.replace(/\s+/g, '_')}`;
+                    return (
+                        <div key={example.id} className="border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 overflow-hidden">
+                            <div className="bg-slate-50 dark:bg-slate-800/50 p-4">
+                                <h4 className="font-bold text-slate-800 dark:text-slate-200 mb-2">{example.title}</h4>
+                                <div className="text-sm text-slate-600 dark:text-slate-400 mb-3 space-y-2" dangerouslySetInnerHTML={{ __html: example.description }}></div>
+                                <div className="flex gap-2 flex-wrap">
+                                    <button onClick={() => toggleCode(example.id)} className="flex items-center gap-2 px-3 py-1 bg-sky-600 text-white rounded-md text-sm hover:bg-sky-700"><Icons.Code className="w-4 h-4" />{showCode[example.id] ? 'Hide Code' : 'Show Code'}</button>
+                                    <button onClick={() => handleExplainCode(example.code, example.title)} disabled={geminiIsLoading[resultId]} className="flex items-center justify-center gap-2 px-3 py-1 bg-violet-600 text-white rounded-md text-sm hover:bg-violet-700 disabled:bg-slate-400">
+                                        {geminiIsLoading[resultId] ? <><div className="spinner"></div><span>Explaining...</span></> : <>✨ Explain Code</>}
+                                    </button>
+                                </div>
+                            </div>
+                            {geminiResults[resultId] && <div className="gemini-content p-4 border-t border-slate-200 dark:border-slate-700 bg-violet-50 dark:bg-violet-900/20 text-slate-700 dark:text-slate-300 text-sm" dangerouslySetInnerHTML={{ __html: geminiResults[resultId] }}></div>}
+                            {showCode[example.id] && (<div className="p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"><div className="flex justify-between items-center mb-2"><span className="text-sm text-slate-500 dark:text-slate-400 italic">Click to copy</span><button onClick={() => copyToClipboard(example.code, example.id)} className={`flex items-center gap-2 w-24 justify-center px-3 py-1 rounded-md text-sm text-white transition-all ${copiedCodeId === example.id ? 'bg-emerald-600' : 'bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500'}`}>{copiedCodeId === example.id ? 'Copied!' : <><Icons.Copy className="w-3 h-3" /> Copy</>}</button></div><pre className="bg-slate-900 text-sky-300 p-4 rounded-md text-sm overflow-x-auto"><code>{example.code}</code></pre></div>)}
+                        </div>
+                    );
+                })}
+            </div>
+        )},
+        { id: 5, title: "Model Comparison", icon: <Icons.Scale className="w-5 h-5" />, content: (
             <div className="overflow-x-auto"><table className="w-full text-left border-collapse"><thead><tr><th className="p-4 bg-slate-100 dark:bg-slate-700 font-semibold border-b border-slate-200 dark:border-slate-600">Feature</th><th className="p-4 bg-sky-100 dark:bg-sky-900/50 font-semibold border-b border-sky-200 dark:border-sky-800 text-sky-900 dark:text-sky-200">XGBoost</th><th className="p-4 bg-slate-100 dark:bg-slate-700 font-semibold border-b border-slate-200 dark:border-slate-600">Random Forest</th><th className="p-4 bg-slate-100 dark:bg-slate-700 font-semibold border-b border-slate-200 dark:border-slate-600">Gradient Boosting</th></tr></thead><tbody className="text-sm"><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Model Building</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Sequential (trees correct previous errors)</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Parallel (independent trees vote)</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Sequential</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Performance</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Typically highest predictive accuracy</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Strong, but often lower than boosting</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Very good, often close to XGBoost</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Speed</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Highly optimized and parallelizable</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Fast to train (can be parallelized)</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Generally slower than XGBoost</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Overfitting</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Controlled by regularization, early stopping, and tuning</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Less prone to overfitting due to bagging</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Can overfit without careful tuning</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Key Feature</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Built-in regularization & optimized performance</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Robustness and simplicity</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">The foundational boosting algorithm</td></tr></tbody></table></div>
         )},
-        { id: 5, title: "Common Pitfalls", icon: <Icons.AlertTriangle className="w-5 h-5" />, content: (
+        { id: 6, title: "Common Pitfalls", icon: <Icons.AlertTriangle className="w-5 h-5" />, content: (
             <div className="space-y-6"><div className="bg-rose-50 dark:bg-rose-900/20 p-5 rounded-lg border-l-4 border-rose-400"><h4 className="font-bold text-rose-900 dark:text-rose-200 mb-2">🚨 Data Leakage</h4><p className="text-slate-700 dark:text-slate-300"><strong>Problem:</strong> Fitting a preprocessor (like a scaler) on the entire dataset before splitting. This "leaks" test set information into the training process.<br/><strong>Solution:</strong> Always split your data first. Fit preprocessors ONLY on the training data, then transform both train and test sets.</p></div><div className="bg-amber-50 dark:bg-amber-900/20 p-5 rounded-lg border-l-4 border-amber-400"><h4 className="font-bold text-amber-900 dark:text-amber-200 mb-2">🤔 Misinterpreting Feature Importance</h4><p className="text-slate-700 dark:text-slate-300"><strong>Problem:</strong> Default importance can be misleading. It shows which features a model *used*, not necessarily which are most *predictive*.<br/><strong>Solution:</strong> Use SHAP values for a more reliable understanding of feature contributions to predictions.</p></div><div className="bg-sky-50 dark:bg-sky-900/20 p-5 rounded-lg border-l-4 border-sky-400"><h4 className="font-bold text-sky-900 dark:text-sky-200 mb-2">🎯 Wrong Evaluation Metric</h4><p className="text-slate-700 dark:text-slate-300"><strong>Problem:</strong> Using "accuracy" on an imbalanced dataset (e.g., 99% non-fraud, 1% fraud) is misleading.<br/><strong>Solution:</strong> For imbalanced classification, use Precision-Recall, F1-Score, or AUC-ROC. For regression, consider RMSE vs. MAE.</p></div></div>
         )},
     ];

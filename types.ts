@@ -22,8 +22,9 @@ export interface CodeExample {
 }
 
 export interface AlgorithmStep {
-    id: string;
+    id:string;
     title: string;
     detail: string;
     formula: string;
+    code?: string;
 }
