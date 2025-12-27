@@ -1,0 +1,5 @@
+{
+  "name": "Interactive XGBoost Learning Tool with Gemini AI",
+  "description": "An educational web application that provides an interactive guide to the XGBoost machine learning algorithm, enhanced with Gemini AI for code explanations, use-case generation, and a helpful AI tutor.",
+  "requestFramePermissions": []
+}
