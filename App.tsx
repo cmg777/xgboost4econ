@@ -12,13 +12,20 @@ const App: React.FC = () => {
     const [expandedSteps, setExpandedSteps] = useState<Record<string, boolean>>({});
     const [showCode, setShowCode] = useState<Record<string, boolean>>({});
     const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('theme') === 'dark';
+        }
+        return false;
+    });
 
     useEffect(() => {
         if (isDarkMode) {
             document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
         } else {
             document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
         }
     }, [isDarkMode]);
 
