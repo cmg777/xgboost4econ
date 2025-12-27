@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { AITutor } from './components/AITutor';
 import { GlossaryTerm } from './components/GlossaryTerm';
 import { Quiz } from './components/Quiz';
@@ -100,9 +100,133 @@ const App: React.FC = () => {
             </div>
         )},
         { id: 1, title: "Core Concepts", icon: <Icons.BookOpen className="w-5 h-5" />, content: (
-            <div className="space-y-6">
-                <div className="bg-amber-50 dark:bg-amber-900/20 p-5 rounded-lg border-l-4 border-amber-400"><h4 className="font-bold text-amber-900 dark:text-amber-200 mb-3">🌳 Gradient Boosting Basics</h4><p className="text-slate-700 dark:text-slate-300 mb-3">Imagine trying to predict house prices. Instead of building one complex model, you build many simple models sequentially, where each new model corrects the errors of the last. This process of sequential error-correction is the essence of <GlossaryTerm term="boosting" definition="An ensemble learning technique that builds a strong model by sequentially adding weak learners, where each new learner corrects the errors of its predecessor." />.</p></div>
-                <div className="grid md:grid-cols-3 gap-4"><div className="bg-sky-50 dark:bg-sky-900/30 border border-sky-200 dark:border-sky-800 p-4 rounded-lg text-center"><Icons.TreePine className="w-8 h-8 text-sky-600 dark:text-sky-400 mx-auto mb-2" /><h5 className="font-bold text-sky-900 dark:text-sky-200">Weak Learners</h5><p className="text-sm text-slate-600 dark:text-slate-400">Simple decision trees.</p></div><div className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 p-4 rounded-lg text-center"><Icons.BarChart3 className="w-8 h-8 text-emerald-600 dark:text-emerald-400 mx-auto mb-2" /><h5 className="font-bold text-emerald-900 dark:text-emerald-200">Gradient Descent</h5><p className="text-sm text-slate-600 dark:text-slate-400">An optimization algorithm to minimize errors.</p></div><div className="bg-violet-50 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-800 p-4 rounded-lg text-center"><Icons.Play className="w-8 h-8 text-violet-600 dark:text-violet-400 mx-auto mb-2" /><h5 className="font-bold text-violet-900 dark:text-violet-200">Boosting</h5><p className="text-sm text-slate-600 dark:text-slate-400">Sequential error correction.</p></div></div>
+            <div className="space-y-8">
+                <div className="bg-sky-50 dark:bg-sky-900/20 p-6 rounded-lg border-l-4 border-sky-400">
+                    <h3 className="text-xl font-bold text-sky-900 dark:text-sky-200 mb-3">The Power of Teamwork: Ensemble Learning</h3>
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                        <GlossaryTerm term="Ensemble learning" definition="A machine learning technique where multiple models are trained to solve the same problem and combined to get better results." /> is based on a simple idea: a team of experts is often better than a single one. Instead of relying on one complex model, we combine the predictions of several simpler models. XGBoost is a powerful type of ensemble method. There are two main strategies for building an ensemble...
+                    </p>
+                </div>
+
+                <div>
+                    <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 mb-4 text-center">Two Paths to a Strong Model</h3>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <h4 className="text-lg font-bold text-emerald-800 dark:text-emerald-300 mb-3 text-center">1. Bagging (Parallel Teamwork)</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 text-center">Models are trained independently on random subsets of data. Their results are averaged or voted on. Think of it as asking many experts for their opinion and taking the most popular one.</p>
+                            <div className="flex justify-center items-center space-x-2">
+                                <div className="flex flex-col items-center">
+                                    <Icons.Database className="w-8 h-8 text-slate-500" />
+                                    <span className="text-xs mt-1">Data</span>
+                                </div>
+                                <Icons.ArrowRight className="w-6 h-6 text-slate-400" />
+                                <div className="flex flex-col items-center">
+                                    <div className="flex space-x-1">
+                                        <Icons.TreePine className="w-6 h-6 text-emerald-500" />
+                                        <Icons.TreePine className="w-6 h-6 text-emerald-500" />
+                                        <Icons.TreePine className="w-6 h-6 text-emerald-500" />
+                                    </div>
+                                     <span className="text-xs mt-1">Independent Trees</span>
+                                </div>
+                                <Icons.ArrowRight className="w-6 h-6 text-slate-400" />
+                                 <div className="flex flex-col items-center">
+                                    <Icons.Scale className="w-8 h-8 text-slate-500" />
+                                    <span className="text-xs mt-1">Vote/Average</span>
+                                </div>
+                            </div>
+                             <p className="text-sm text-slate-600 dark:text-slate-400 mt-4"><strong>Key Idea:</strong> Reduce variance. It's great at preventing overfitting.<br/><strong>Example:</strong> <GlossaryTerm term="Random Forest" definition="An ensemble method using many decision trees on random subsets of data and features. It averages their votes to make a final prediction." /></p>
+                        </div>
+                         <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border-2 border-sky-500 shadow-lg">
+                            <h4 className="text-lg font-bold text-sky-800 dark:text-sky-300 mb-3 text-center">2. Boosting (Sequential Learning)</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 text-center">Models are trained one after another. Each new model focuses on fixing the mistakes made by the previous one. It's like a relay race where each runner tries to improve on the last.</p>
+                             <div className="flex justify-center items-center space-x-2">
+                                <div className="flex flex-col items-center">
+                                    <Icons.Database className="w-8 h-8 text-slate-500" />
+                                    <span className="text-xs mt-1">Data</span>
+                                </div>
+                                 <div className="flex items-center">
+                                     <Icons.TreePine className="w-6 h-6 text-sky-500" />
+                                     <Icons.ArrowRight className="w-5 h-5 text-slate-400" />
+                                     <Icons.TreePine className="w-6 h-6 text-sky-500" />
+                                     <Icons.ArrowRight className="w-5 h-5 text-slate-400" />
+                                     <Icons.TreePine className="w-6 h-6 text-sky-500" />
+                                 </div>
+                                 <Icons.ArrowRight className="w-6 h-6 text-slate-400" />
+                                 <div className="flex flex-col items-center">
+                                    <Icons.CheckCircle className="w-8 h-8 text-slate-500" />
+                                    <span className="text-xs mt-1">Final Model</span>
+                                </div>
+                            </div>
+                             <p className="text-sm text-slate-600 dark:text-slate-400 mt-4"><strong>Key Idea:</strong> Reduce bias. It's great at building highly accurate models.<br/><strong>Example:</strong> <GlossaryTerm term="XGBoost" definition="An optimized and high-performance implementation of the gradient boosting algorithm." /></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-200 mb-4">The Three Pillars of Gradient Boosting</h3>
+                    <div className="grid md:grid-cols-3 gap-6">
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <div className="flex items-center mb-3">
+                                <Icons.TreePine className="w-8 h-8 text-sky-600 dark:text-sky-400 mr-3" />
+                                <h4 className="text-lg font-bold text-slate-800 dark:text-slate-200">1. Weak Learners</h4>
+                            </div>
+                            <p className="text-slate-600 dark:text-slate-400">
+                                Think of these as simple "rules of thumb." Each one is a very basic model (usually a small <GlossaryTerm term="decision tree" definition="A simple model that splits data based on feature values to make predictions." />) that is only slightly better than random guessing. The magic isn't in any single rule, but in combining many of them.
+                            </p>
+                        </div>
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <div className="flex items-center mb-3">
+                                 <Icons.PlusCircle className="w-8 h-8 text-amber-600 dark:text-amber-400 mr-3" />
+                                 <h4 className="text-lg font-bold text-slate-800 dark:text-slate-200">2. Additive Training</h4>
+                            </div>
+                             <p className="text-slate-600 dark:text-slate-400">
+                                The model is built stage-by-stage. Imagine a sculptor adding one layer of clay at a time. The first tree makes an initial prediction, the second tree tries to correct its errors, the third corrects the remaining errors, and so on. Each new tree adds to the work of the previous ones.
+                            </p>
+                        </div>
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <div className="flex items-center mb-3">
+                                 <Icons.BarChart3 className="w-8 h-8 text-emerald-600 dark:text-emerald-400 mr-3" />
+                                 <h4 className="text-lg font-bold text-slate-800 dark:text-slate-200">3. Gradient Descent</h4>
+                            </div>
+                             <p className="text-slate-600 dark:text-slate-400">
+                                This is the "how" of learning from mistakes. It's an algorithm that figures out in which direction to tweak the model to best reduce the error (<GlossaryTerm term="loss function" definition="A function that measures the 'cost' of the model's errors. The goal of training is to find model parameters that minimize this value." />). Each new tree is trained to follow the direction of the "gradient"—the steepest path toward a better prediction.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
+                    <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 mb-4">Putting It All Together: A Simple Analogy</h3>
+                    <p className="text-slate-600 dark:text-slate-400 mb-4">Let's try to predict a person's weight using their height.</p>
+                    <ol className="relative border-l border-slate-200 dark:border-slate-700 space-y-6">
+                        <li className="ml-6">
+                            <span className="absolute flex items-center justify-center w-6 h-6 bg-sky-100 rounded-full -left-3 ring-8 ring-white dark:ring-slate-800 dark:bg-sky-900">1</span>
+                            <h4 className="font-semibold text-slate-700 dark:text-slate-200">The First Guess</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">Our model starts with a naive guess: the average weight of everyone in the training data. Let's say it's <strong>150 lbs</strong>. This is our initial prediction for everyone.</p>
+                        </li>
+                         <li className="ml-6">
+                            <span className="absolute flex items-center justify-center w-6 h-6 bg-sky-100 rounded-full -left-3 ring-8 ring-white dark:ring-slate-800 dark:bg-sky-900">2</span>
+                            <h4 className="font-semibold text-slate-700 dark:text-slate-200">Find the Errors (Residuals)</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">We compare our guess to the actual weights. A person who weighs 170 lbs has an error of <strong>+20 lbs</strong>. A person who weighs 145 lbs has an error of <strong>-5 lbs</strong>. These errors are what we need to fix.</p>
+                        </li>
+                         <li className="ml-6">
+                            <span className="absolute flex items-center justify-center w-6 h-6 bg-sky-100 rounded-full -left-3 ring-8 ring-white dark:ring-slate-800 dark:bg-sky-900">3</span>
+                            <h4 className="font-semibold text-slate-700 dark:text-slate-200">Train a Specialist</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">We train our first weak learner (a simple tree) not on weight, but on the <strong>errors</strong>. It might learn a simple rule: "If height > 6 feet, the error is usually around +25 lbs." This tree is a specialist in fixing mistakes related to height.</p>
+                        </li>
+                         <li className="ml-6">
+                            <span className="absolute flex items-center justify-center w-6 h-6 bg-sky-100 rounded-full -left-3 ring-8 ring-white dark:ring-slate-800 dark:bg-sky-900">4</span>
+                            <h4 className="font-semibold text-slate-700 dark:text-slate-200">Update the Prediction</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">We add a small fraction (the learning rate) of the specialist's correction to our initial guess. For a tall person, the new prediction becomes: 150 lbs + (0.1 * 25 lbs) = <strong>152.5 lbs</strong>. We've moved closer to the true value!</p>
+                        </li>
+                         <li className="ml-6">
+                            <span className="absolute flex items-center justify-center w-6 h-6 bg-sky-100 rounded-full -left-3 ring-8 ring-white dark:ring-slate-800 dark:bg-sky-900">5</span>
+                            <h4 className="font-semibold text-slate-700 dark:text-slate-200">Repeat with a New Specialist</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">We calculate the <strong>new, smaller errors</strong>. Now, we train a second tree on these remaining errors. This new specialist might find another pattern we missed, like "If the person is also an athlete, the error is +15 lbs." The process repeats, with each tree fixing the mistakes left over by the team before it.</p>
+                        </li>
+                    </ol>
+                </div>
+
                 <Quiz questions={coreConceptsQuiz} />
             </div>
         )},
@@ -116,7 +240,7 @@ const App: React.FC = () => {
                         </button>
                         {expandedSteps[step.id] && (
                             <div className="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4 bg-white dark:bg-slate-800">
-                                <p className="text-slate-700 dark:text-slate-300">{step.detail}</p>
+                                <p className="text-slate-700 dark:text-slate-300" dangerouslySetInnerHTML={{ __html: step.detail.replace('log-odds', `<span class="glossary-term">log-odds<span class="tooltip">The logarithm of the odds (probability of event / probability of no event). Used as the initial prediction in binary classification.</span></span>`).replace('second-order gradient', `<span class="glossary-term">second-order gradient<span class="tooltip">Incorporates information about the curvature of the loss function, allowing XGBoost to find the optimal step more efficiently.</span></span>`) }}></p>
                                 <div className="bg-slate-100 dark:bg-slate-700 p-4 rounded-lg">
                                     <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">FORMULA</div>
                                     <div className="font-mono text-sm text-slate-800 dark:text-slate-200">{step.formula}</div>
@@ -184,9 +308,7 @@ const App: React.FC = () => {
                         <div className="p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
                             <div className="flex justify-between items-center mb-2">
                                 <span className="text-sm text-slate-600 dark:text-slate-300 font-semibold">Generated Solution</span>
-                                <button onClick={() => copyToClipboard(geminiResults['case_study_code'], 'case_study')} className={`flex items-center gap-2 w-24 justify-center px-3 py-1 rounded-md text-sm text-white transition-all ${copiedCodeId === 'case_study' ? 'bg-emerald-600' : 'bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500'}`}>
-                                    {copiedCodeId === 'case_study' ? 'Copied!' : <><Icons.Copy className="w-3 h-3" /> Copy</>}
-                                </button>
+                                <button onClick={() => copyToClipboard(geminiResults['case_study_code'], 'case_study')} className={`flex items-center gap-2 w-24 justify-center px-3 py-1 rounded-md text-sm text-white transition-all ${copiedCodeId === 'case_study' ? 'bg-emerald-600' : 'bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500'}`}>{copiedCodeId === 'case_study' ? 'Copied!' : <><Icons.Copy className="w-3 h-3" /> Copy</>}</button>
                             </div>
                             <pre className="bg-slate-900 text-sky-300 p-4 rounded-md text-sm overflow-x-auto">
                                 <code>{geminiResults['case_study_code']}</code>
@@ -199,8 +321,16 @@ const App: React.FC = () => {
         { id: 4, title: "SHAP Code Analysis", icon: <Icons.FileCode className="w-5 h-5" />, content: (
             <div className="space-y-6">
                 <div className="bg-sky-50 dark:bg-sky-900/20 p-5 rounded-lg border-l-4 border-sky-400">
-                    <h3 className="text-xl font-bold text-sky-900 dark:text-sky-200 mb-2">Unveiling the "Why": Interpreting XGBoost with SHAP</h3>
-                    <p className="text-slate-700 dark:text-slate-300">While XGBoost is incredibly powerful, it's often seen as a "black box." <GlossaryTerm term="SHAP" definition="SHapley Additive exPlanations is a game theoretic approach to explain the output of any machine learning model." /> helps us understand the *why* behind its predictions. This section breaks down a full Python script for SHAP analysis, from setup to advanced plotting.</p>
+                    <h3 className="text-xl font-bold text-sky-900 dark:text-sky-200 mb-3">Case Study: Understanding California Housing Prices</h3>
+                    <p className="text-slate-700 dark:text-slate-300 mb-3">
+                        Imagine you're a data scientist at a real estate firm. Your task is to build a model that can accurately predict housing prices in California. This is a classic and highly practical problem, as precise valuations are critical for buyers, sellers, and investors. The dataset contains features for different housing blocks, including median income, house age, average number of rooms, and location (latitude and longitude). The goal isn't just to predict a number, but to understand the complex factors that determine a home's value.
+                    </p>
+                    <p className="text-slate-700 dark:text-slate-300 mb-3">
+                        For this task, XGBoost is an excellent choice. Its ability to handle tabular data, capture complex non-linear relationships, and deliver high predictive accuracy makes it a go-to algorithm for regression problems like this one. It can effectively weigh the importance of different features and their interactions, leading to a robust and reliable pricing model. However, simply having an accurate model isn't enough; stakeholders will want to know *why* the model makes the predictions it does.
+                    </p>
+                    <p className="text-slate-700 dark:text-slate-300">
+                        This is where <GlossaryTerm term="SHAP" definition="SHapley Additive exPlanations is a game theoretic approach to explain the output of any machine learning model." /> becomes indispensable. While XGBoost can feel like a "black box," SHAP opens it up, allowing us to see the inner workings. It helps us answer critical questions: Which features have the biggest impact on price overall? How does median income affect prices differently in various neighborhoods? Is the number of rooms always a positive factor? The following code walkthrough demonstrates how to build an accurate model and then use SHAP to uncover these crucial, actionable insights.
+                    </p>
                 </div>
                 {shapCodeWalkthrough.map((example) => {
                     const resultId = `explain_${example.title.replace(/\s+/g, '_')}`;
@@ -224,7 +354,7 @@ const App: React.FC = () => {
             </div>
         )},
         { id: 5, title: "Model Comparison", icon: <Icons.Scale className="w-5 h-5" />, content: (
-            <div className="overflow-x-auto"><table className="w-full text-left border-collapse"><thead><tr><th className="p-4 bg-slate-100 dark:bg-slate-700 font-semibold border-b border-slate-200 dark:border-slate-600">Feature</th><th className="p-4 bg-sky-100 dark:bg-sky-900/50 font-semibold border-b border-sky-200 dark:border-sky-800 text-sky-900 dark:text-sky-200">XGBoost</th><th className="p-4 bg-slate-100 dark:bg-slate-700 font-semibold border-b border-slate-200 dark:border-slate-600">Random Forest</th><th className="p-4 bg-slate-100 dark:bg-slate-700 font-semibold border-b border-slate-200 dark:border-slate-600">Gradient Boosting</th></tr></thead><tbody className="text-sm"><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Model Building</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Sequential (trees correct previous errors)</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Parallel (independent trees vote)</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Sequential</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Performance</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Typically highest predictive accuracy</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Strong, but often lower than boosting</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Very good, often close to XGBoost</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Speed</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Highly optimized and parallelizable</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Fast to train (can be parallelized)</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Generally slower than XGBoost</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Overfitting</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Controlled by regularization, early stopping, and tuning</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Less prone to overfitting due to bagging</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Can overfit without careful tuning</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Key Feature</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Built-in regularization & optimized performance</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Robustness and simplicity</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">The foundational boosting algorithm</td></tr></tbody></table></div>
+            <div className="overflow-x-auto"><table className="w-full text-left border-collapse"><thead><tr><th className="p-4 bg-slate-100 dark:bg-slate-700 font-semibold border-b border-slate-200 dark:border-slate-600">Feature</th><th className="p-4 bg-sky-100 dark:bg-sky-900/50 font-semibold border-b border-sky-200 dark:border-sky-800 text-sky-900 dark:text-sky-200">XGBoost</th><th className="p-4 bg-slate-100 dark:bg-slate-700 font-semibold border-b border-slate-200 dark:border-slate-600"><GlossaryTerm term="Random Forest" definition="An ensemble method using many decision trees on random subsets of data and features. It averages their votes to make a final prediction." /></th><th className="p-4 bg-slate-100 dark:bg-slate-700 font-semibold border-b border-slate-200 dark:border-slate-600"><GlossaryTerm term="Gradient Boosting" definition="The foundational ensemble technique where models are built sequentially, each one correcting the errors of its predecessor." /></th></tr></thead><tbody className="text-sm"><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Model Building</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Sequential (trees correct previous errors)</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Parallel (independent trees vote)</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Sequential</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Performance</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Typically highest predictive accuracy</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Strong, but often lower than boosting</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Very good, often close to XGBoost</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Speed</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Highly optimized and parallelizable</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Fast to train (can be parallelized)</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Generally slower than XGBoost</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Overfitting</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Controlled by regularization, early stopping, and tuning</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Less prone to overfitting due to <GlossaryTerm term="bagging" definition="Short for Bootstrap Aggregating. Training multiple models on different random samples of the data in parallel to reduce variance." /></td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Can overfit without careful tuning</td></tr><tr className="hover:bg-slate-50 dark:hover:bg-slate-700"><td className="p-4 border-b border-slate-200 dark:border-slate-600 font-semibold text-slate-600 dark:text-slate-300">Key Feature</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Built-in regularization & optimized performance</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">Robustness and simplicity</td><td className="p-4 border-b border-slate-200 dark:border-slate-600">The foundational boosting algorithm</td></tr></tbody></table></div>
         )},
         { id: 6, title: "Common Pitfalls", icon: <Icons.AlertTriangle className="w-5 h-5" />, content: (
             <div className="space-y-6"><div className="bg-rose-50 dark:bg-rose-900/20 p-5 rounded-lg border-l-4 border-rose-400"><h4 className="font-bold text-rose-900 dark:text-rose-200 mb-2">🚨 Data Leakage</h4><p className="text-slate-700 dark:text-slate-300"><strong>Problem:</strong> Fitting a preprocessor (like a scaler) on the entire dataset before splitting. This "leaks" test set information into the training process.<br/><strong>Solution:</strong> Always split your data first. Fit preprocessors ONLY on the training data, then transform both train and test sets.</p></div><div className="bg-amber-50 dark:bg-amber-900/20 p-5 rounded-lg border-l-4 border-amber-400"><h4 className="font-bold text-amber-900 dark:text-amber-200 mb-2">🤔 Misinterpreting Feature Importance</h4><p className="text-slate-700 dark:text-slate-300"><strong>Problem:</strong> Default importance can be misleading. It shows which features a model *used*, not necessarily which are most *predictive*.<br/><strong>Solution:</strong> Use SHAP values for a more reliable understanding of feature contributions to predictions.</p></div><div className="bg-sky-50 dark:bg-sky-900/20 p-5 rounded-lg border-l-4 border-sky-400"><h4 className="font-bold text-sky-900 dark:text-sky-200 mb-2">🎯 Wrong Evaluation Metric</h4><p className="text-slate-700 dark:text-slate-300"><strong>Problem:</strong> Using "accuracy" on an imbalanced dataset (e.g., 99% non-fraud, 1% fraud) is misleading.<br/><strong>Solution:</strong> For imbalanced classification, use Precision-Recall, F1-Score, or AUC-ROC. For regression, consider RMSE vs. MAE.</p></div></div>
@@ -267,7 +397,7 @@ const App: React.FC = () => {
                                 <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border-l-4 border-amber-400 shadow-sm"><div className="font-semibold text-slate-800 dark:text-slate-200"><code className="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-1 rounded">learning_rate</code> (eta)</div><p className="text-sm text-slate-600 dark:text-slate-400 mt-1"><strong>Intuition:</strong> How cautiously the model learns from each new tree's corrections.<br/><strong>Use:</strong> A small value (e.g., 0.01-0.2) makes the learning process more robust against overfitting but requires more `n_estimators`.</p></div>
                                 <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border-l-4 border-violet-400 shadow-sm"><div className="font-semibold text-slate-800 dark:text-slate-200"><code className="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-1 rounded">subsample</code></div><p className="text-sm text-slate-600 dark:text-slate-400 mt-1"><strong>Intuition:</strong> The fraction of data each tree gets to see.<br/><strong>Use:</strong> Setting this below 1.0 (e.g., 0.8) introduces randomness, which helps prevent overfitting by ensuring no single tree is biased by the full dataset.</p></div>
                                 <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border-l-4 border-rose-400 shadow-sm"><div className="font-semibold text-slate-800 dark:text-slate-200"><code className="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-1 rounded">colsample_bytree</code></div><p className="text-sm text-slate-600 dark:text-slate-400 mt-1"><strong>Intuition:</strong> The fraction of features (columns) each tree gets to use.<br/><strong>Use:</strong> Similar to `subsample`, this prevents the model from relying too heavily on a few strong features and improves generalization.</p></div>
-                                <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border-l-4 border-yellow-400 shadow-sm"><div className="font-semibold text-slate-800 dark:text-slate-200"><code className="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-1 rounded">reg_alpha/reg_lambda</code></div><p className="text-sm text-slate-600 dark:text-slate-400 mt-1"><strong>Intuition:</strong> Penalties to keep the model simple (L1 and L2 regularization).<br/><strong>Use:</strong> Increase these values if your model is overfitting. `reg_alpha` is good for high-dimensional data, while `reg_lambda` is a more general-purpose penalty.</p></div>
+                                <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border-l-4 border-yellow-400 shadow-sm"><div className="font-semibold text-slate-800 dark:text-slate-200"><code className="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-1 rounded">reg_alpha/reg_lambda</code></div><p className="text-sm text-slate-600 dark:text-slate-400 mt-1"><strong>Intuition:</strong> Penalties to keep the model simple (<GlossaryTerm term="L1 and L2 regularization" definition="L1 (Lasso) can shrink coefficients to zero, performing feature selection. L2 (Ridge) shrinks them to be small. XGBoost uses both." />).<br/><strong>Use:</strong> Increase these values if your model is overfitting. `reg_alpha` is good for high-dimensional data, while `reg_lambda` is a more general-purpose penalty.</p></div>
                             </div>
                         </div>
                         <div>

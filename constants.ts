@@ -55,8 +55,26 @@ export const algorithmSteps: AlgorithmStep[] = [
 ];
 
 export const coreConceptsQuiz: QuizQuestion[] = [
-    { question: "What is the primary goal of each new tree in a gradient boosting model?", options: [{ text: "To predict the original target variable.", correct: false }, { text: "To correct the errors (residuals) of the previous trees.", correct: true }, { text: "To be as deep and complex as possible.", correct: false }] },
-    { question: "What does 'boosting' refer to in the context of XGBoost?", options: [{ text: "A method of training many models in parallel.", correct: false }, { text: "A sequential process where models are added one by one to correct prior mistakes.", correct: true }, { text: "Using very powerful, complex models from the start.", correct: false }] }
+    { question: "What is the key difference between Bagging and Boosting?", options: [
+        { text: "Bagging trains models in parallel; Boosting trains them sequentially.", correct: true }, 
+        { text: "Bagging uses deep trees; Boosting uses simple 'weak learners'.", correct: false }, 
+        { text: "Bagging is for regression; Boosting is for classification.", correct: false }
+    ] },
+    { question: "What is 'additive training' in the context of XGBoost?", options: [
+        { text: "Averaging the predictions from many independent models.", correct: false }, 
+        { text: "Sequentially adding new models that correct the errors of previous ones.", correct: true }, 
+        { text: "Using a single, very complex model.", correct: false }
+    ] },
+    { question: "What specific task does each new tree in a boosting algorithm perform?", options: [
+        { text: "It tries to predict the final target value directly.", correct: false },
+        { text: "It tries to predict the errors (residuals) left by the current model.", correct: true },
+        { text: "It randomly guesses to explore new possibilities.", correct: false }
+    ] },
+     { question: "What is the main purpose of Gradient Descent in this process?", options: [
+        { text: "To determine the most efficient way to reduce the model's overall error.", correct: true },
+        { text: "To split the data into training and testing sets.", correct: false },
+        { text: "To decide how many trees the model should have.", correct: false }
+    ] }
 ];
 
 export const algorithmQuiz: QuizQuestion[] = [
